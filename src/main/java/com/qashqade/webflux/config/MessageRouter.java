@@ -10,19 +10,16 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @Configuration(proxyBeanMethods = false)
 public class MessageRouter {
 
-    @Autowired
-    MeterRegistry meterRegistry;
-
     @Bean
     public RouterFunction<ServerResponse> route(MessageHandler messageHandler) {
-//        Timer timer = meterRegistry.timer("timeToGetId", "routeGET");
-//        TODO add timer for getById
         return RouterFunctions
             .route(GET("/messages"), messageHandler::list)
             .andRoute(GET("/messages/{id}"), messageHandler::getById)

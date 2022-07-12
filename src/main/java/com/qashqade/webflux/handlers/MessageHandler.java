@@ -2,6 +2,11 @@ package com.qashqade.webflux.handlers;
 
 import com.qashqade.webflux.domain.Message;
 import com.qashqade.webflux.service.MessageService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -13,6 +18,7 @@ import java.util.Map;
 
 @Component
 public class MessageHandler {
+    private static final String DEFAULT_LIMIT = "100";
 
     private final MessageService messageService;
 
@@ -21,17 +27,15 @@ public class MessageHandler {
     }
 
     public Mono<ServerResponse> list(ServerRequest request) {
-
-//        Flux<Message> body = Flux.just("1", "2", "3").map(Message::new);
+        var limit = Integer.parseInt(request.queryParam("limit").orElse(DEFAULT_LIMIT));
 
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(/*body*/ messageService.allMessages(), Message.class);
+            .body( messageService.allMessages(limit), Message.class);
     }
 
     public Mono<ServerResponse> getById(ServerRequest request) {
-
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
