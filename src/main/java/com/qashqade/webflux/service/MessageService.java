@@ -3,6 +3,7 @@ package com.qashqade.webflux.service;
 import com.qashqade.webflux.domain.Message;
 import com.qashqade.webflux.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,15 +18,15 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public Flux<Message> allMessages(){
-        return messageRepository.findAll();
+    public Flux<Message> allMessages(int limit) {
+        return messageRepository.findAllLimitBy(PageRequest.of(0, limit));
     }
 
-    public Mono<Message> getMessageById(Long id){
+    public Mono<Message> getMessageById(Long id) {
         return messageRepository.findById(id);
     }
 
-    public Mono<Message> saveMessage(Message message){
+    public Mono<Message> saveMessage(Message message) {
         return messageRepository.save(message);
     }
 }
