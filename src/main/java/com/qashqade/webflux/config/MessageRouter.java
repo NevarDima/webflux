@@ -19,10 +19,20 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class MessageRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(MessageHandler messageHandler) {
+    public RouterFunction<ServerResponse> getAllMessagesRoute(MessageHandler messageHandler) {
         return RouterFunctions
-            .route(GET("/messages"), messageHandler::list)
-            .andRoute(GET("/messages/{id}"), messageHandler::getById)
-            .andRoute(POST("/message"), messageHandler::saveMessage);
+            .route(GET("/messages"), messageHandler::list);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getMessageByIdRoute(MessageHandler messageHandler) {
+        return RouterFunctions
+            .route(GET("/messages/{id}"), messageHandler::getById);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> saveMessageRoute(MessageHandler messageHandler) {
+        return RouterFunctions
+            .route(POST("/message"), messageHandler::saveMessage);
     }
 }

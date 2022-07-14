@@ -30,18 +30,18 @@ public class MessageHandler {
 
     public Mono<ServerResponse> list(ServerRequest request) {
         var limit = Integer.parseInt(request.queryParam("limit").orElse(DEFAULT_LIMIT));
-        messageService.allMessages(limit);
+//        messageService.allMessages(limit);
         return ServerResponse
                 .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue("done"));
-            //.body( messageService.allMessages(limit), Message.class);
+                .contentType(MediaType.APPLICATION_NDJSON)
+//                .body(BodyInserters.fromValue("done"));
+            .body( messageService.allMessages(limit), Message.class);
     }
 
     public Mono<ServerResponse> getById(ServerRequest request) {
         return ServerResponse
             .ok()
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_NDJSON)
             .body(messageService.getMessageById(Long.valueOf(request.pathVariable("id"))), Message.class);
     }
 

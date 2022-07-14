@@ -1,11 +1,50 @@
 version: "3.8"
 services:
-  postgres:
+
+  postgres_db_webflux:
     image: "postgres"
-    container_name: "webflux-pg-14.4"
+    container_name: "webflux-postgres-container"
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - backend
+    restart: always
+
+  mongo_db_docserv:
+    image: "mongo"
+    container_name: "docserv-mongo-container"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    expose:
+      - 27017
+    networks:
+      - backend
+    platform: linux/x86_64
+    restart: always
+
+  mongo-express:
+      image: "mongo-express"
+      container_name: "mongo-express-container"
+      ports:
+        - "8082:8081"
+      depends_on:
+        - "mongo_db_docserv"
+      environment:
+        ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+        ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+        ME_CONFIG_MONGODB_SERVER: ${MONGO_SERVER}
+      networks:
+        - backend
+      restart: always
+
+networks:
+  backend:
+volumes:
+  db-data:
