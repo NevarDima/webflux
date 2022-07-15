@@ -35,7 +35,7 @@ public class MessageHandler {
                 .ok()
                 .contentType(MediaType.APPLICATION_NDJSON)
 //                .body(BodyInserters.fromValue("done"));
-            .body( messageService.allMessages(limit), Message.class);
+                .body( messageService.allMessages(limit), Message.class);
     }
 
     public Mono<ServerResponse> getById(ServerRequest request) {
