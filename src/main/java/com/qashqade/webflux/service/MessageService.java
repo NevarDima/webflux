@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.logging.Level;
+
 @Service
 public class MessageService {
 
@@ -21,14 +23,19 @@ public class MessageService {
     public Flux<Message> allMessages(int limit) {
         long currentTime = System.currentTimeMillis();
         return messageRepository.findAllLimitBy(PageRequest.of(0,limit))
+            .log("MessageService.allMessages", Level.INFO)
             .doOnComplete(() -> System.out.println("webflux " + limit + " Yes! " + (System.currentTimeMillis() - currentTime)/1000.0))
-            .doOnError((e) -> System.out.println("webflux " + limit + "No ;(. " + e.getMessage()));
+            .doOnError((e) -> System.out.println("webflux " + limit + " No! " + e.getMessage()));
 
 
     }
 
     public Mono<Message> getMessageById(Long id) {
-        return messageRepository.findById(id);
+        long currentTime = System.currentTimeMillis();
+        return messageRepository.findById(id)
+            .log("MessageService.getMessageById", Level.INFO)
+            .doOnSuccess(m -> System.out.println("webflux id " + id + " Yes! " + (System.currentTimeMillis() - currentTime)/1000.0))
+            .doOnError((e) -> System.out.println("webflux id " + id + " No! " + e.getMessage()));
     }
 
     public Mono<Message> saveMessage(Message message) {
