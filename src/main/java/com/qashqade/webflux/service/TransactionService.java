@@ -27,7 +27,7 @@ public class TransactionService {
         long currentTime = System.currentTimeMillis();
         return transactionRepository.findAllLimitBy(PageRequest.of(0, limit))
             .log("TransactionService.allTransactions", Level.INFO, SignalType.ON_ERROR)
-            .doOnComplete(() -> log.debug("{} transactions have been got from postgres db in {} seconds", limit,
+            .doOnComplete(() -> log.debug("{} transactions have been got from postgres db in {} seconds!", limit,
                 (System.currentTimeMillis() - currentTime) / 1000.0))
             .doOnError((e) -> log.error("{} can't be obtained from postgres db!", limit, e));
 

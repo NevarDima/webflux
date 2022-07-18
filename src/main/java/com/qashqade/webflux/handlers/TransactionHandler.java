@@ -21,11 +21,9 @@ public class TransactionHandler {
 
     public Mono<ServerResponse> list(ServerRequest request) {
         var limit = Integer.parseInt(request.queryParam("limit").orElse(DEFAULT_LIMIT));
-//        messageService.allMessages(limit);
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_NDJSON)
-//                .body(BodyInserters.fromValue("done"));
             .body(transactionService.allTransactions(limit), Transaction.class);
     }
 
