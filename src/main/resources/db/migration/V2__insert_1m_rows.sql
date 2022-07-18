@@ -1,7 +1,7 @@
 do $$
 begin
 for count in 1..1000000 loop
-        insert into message (trx,
+        insert into transaction (trx,
         subTransactions,
         appliedDateChoice,
         isRealized,

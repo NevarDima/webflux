@@ -1,20 +1,15 @@
 package com.qashqade.webflux.domain;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-
 @Data
 @NoArgsConstructor
-@Table(name = "message")
-public class Message {
+@Table(name = "transaction")
+public class Transaction {
 
     @Id
     private Long id;
@@ -77,7 +72,7 @@ public class Message {
     @Column(value = "isPartOfAllProgressiveRuns")
     boolean isPartOfAllProgressiveRuns = false;
 
-    public Message(
+    public Transaction(
         String trx,
         String subTransactions,
         String appliedDateChoice,
