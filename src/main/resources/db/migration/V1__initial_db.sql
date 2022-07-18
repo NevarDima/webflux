@@ -1,4 +1,4 @@
-create table message (
+create table transaction (
     id bigserial primary key,
     trx text,
     subTransactions text,
